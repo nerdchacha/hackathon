@@ -4,18 +4,24 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "local": "nodemon download/local"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@vendia/serverless-express": "^4.3.7",
+    "aws-sdk": "^2.910.0",
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
+    "node-fetch": "^2.6.1",
     "passport": "^0.4.1",
     "passport-atlassian-oauth2": "^2.1.0",
     "pug": "^3.0.2",
     "serverless-dotenv-plugin": "^3.9.0",
     "serverless-pseudo-parameters": "^2.5.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7",
+    "serverless-iam-roles-per-function": "^3.2.0-e97ab49"
   }
 }
