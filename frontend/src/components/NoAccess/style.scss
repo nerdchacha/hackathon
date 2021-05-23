@@ -1,0 +1,32 @@
+.no-access-page {
+  height: 100vh;
+  .container {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    p {
+      font-size: 24px;
+    }
+    .btn {
+      padding: 10px;
+      text-decoration: none;
+      text-align: center;
+      font-size: 22px;
+      margin: 30px 0;
+      border-radius: 0;
+      border: 3px solid #10427b;
+      background: transparent;
+      color: #10427b;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+      transition: all 0.25s ease-in;
+      &:hover {
+        background: #10427b;
+        color: white;
+      }
+    }
+  }
+}

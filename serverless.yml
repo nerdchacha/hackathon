@@ -4,19 +4,33 @@ frameworkVersion: '2'
 provider:
   name: aws
   runtime: nodejs12.x
-  lambdaHashingVersion: 20201221    
+  lambdaHashingVersion: 20201221
+  apiGateway:
+    binaryMediaTypes:
+      - '*/*'
+
+package:
+  patterns:
+    - '!frontend/**'
 
 plugins:
   - serverless-dotenv-plugin
   - serverless-pseudo-parameters
   - serverless-iam-roles-per-function
+  - serverless-binary-cors
 
 functions:
   download:
     handler: download/lambda.handler
     events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
+      - http:
+          method: ANY
+          path: /
+          cors: true
+      - http:
+          method: ANY
+          path: /{proxy+}
+          cors: true
     environment:
       OAUTH_CLIENT_ID: ${env:OAUTH_CLIENT_ID}
       OAUTH_CLIENT_SECRET: ${env:OAUTH_CLIENT_SECRET}

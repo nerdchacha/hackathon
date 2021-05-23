@@ -12,7 +12,7 @@ const checkUserAccess = async (req, res, next) => {
     req.jiraUser = user;
     next();
   } catch (e) {
-    console.log(e)
+    console.error(e)
     res.sendStatus(401)
   }
 }

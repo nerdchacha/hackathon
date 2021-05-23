@@ -1,7 +1,7 @@
 const express = require('express')
-const router = express.Router()
 const AWS = require('aws-sdk')
 
+const router = express.Router()
 const S3 = new AWS.S3()
 
 router.get('/list', async (req, res) => {
@@ -11,19 +11,27 @@ router.get('/list', async (req, res) => {
     const objects = await S3.listObjectsV2({ Bucket: process.env.BUCKET, Prefix: prefix, Delimiter: delimiter }).promise()
     res.send(objects)
   } catch (e) {
-    console.log(e)
-    res.status(502).send({message: 'Unable to list files on S3'});
+    console.error(e)
+    res.status(502).send({ message: 'Unable to list files on S3' });
   }
 })
 
-router.get('/get-signed-url', async (req, res) => {
+router.get('/get-object', async (req, res) => {
   try {
-    const expires = req.query.expires ? parseInt(req.query.expires) : 600
     const key = req.query.key
-    const link = await S3.getSignedUrlPromise('getObject', { Bucket: process.env.BUCKET, Key: key, Expires: expires })
-    res.json({ link })
+    console.info(`${req.jiraUser.emailAddress} requested to download ${key}`)
+    const metadata = await S3.headObject({ Bucket: process.env.BUCKET, Key: key }).promise()
+    res.set('Content-Type', metadata.ContentType)
+    res.set('Content-Length', metadata.ContentLength)
+    res.attachment(key)
+    const stream = S3.getObject({ Bucket: process.env.BUCKET, Key: key }).createReadStream()
+    stream.on('error', (err) => {
+      console.error(err)
+      res.status(502).send({ message: 'Unable to get download object' });
+    })
+    stream.pipe(res);
   } catch (e) {
-    console.log(e)
+    console.error(e)
     res.status(502).send({ message: 'Unable to get download link' });
   }
 })
